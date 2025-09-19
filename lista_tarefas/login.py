@@ -1,5 +1,6 @@
 import ttkbootstrap as tb
 from tkinter import messagebox
+from lista_tarefa import Telalista
 
 
 class Telalogin:
@@ -34,13 +35,24 @@ class Telalogin:
         self.janela_botao.pack( padx=20, pady=20)
 
         #botao para cancelar
-        self.janela_botao_cancelar = tb.Button(self.janela, text="SAIR", command=self.janela.destroy)
+        self.janela_botao_cancelar = tb.Button(self.janela, text="SAIR", command=self.sair)
         self.janela_botao_cancelar.pack( padx=20, pady=40)
 
         #mostrar aceitação
         self.aceito_label = tb.Label(self.janela, text="")
         self.aceito_label.pack(pady=20)
 
+
+    def run(self):
+        self.janela.mainloop()
+
+    #confirmação pra sair
+    def sair (self):
+        resposta = messagebox.askyesno("Sair?", "Você deseja mesmo sair?")
+        if resposta == True:
+            exit()
+
+    #def para conferir os dados colocados
     def conferir_login(self):
 
         login = (self.janela_login.get())
@@ -48,9 +60,17 @@ class Telalogin:
 
 
         if login == "gabriela" and senha == "gabi2008":
-            messagebox.showinfo("Login aceito!", "Informações corretas inseridas.")
+            #messagebox.showinfo("Login aceito!", "Informações corretas inseridas.")
+            self.janela.destroy()
+            lista = Telalista()
+            lista.run()
+            
+
+
         else:
             messagebox.showerror("Login recusado.", "Tente novamente na próxima!") 
+
+    
       
           
         
@@ -64,8 +84,7 @@ class Telalogin:
 
 
 
-    def run(self):
-        self.janela.mainloop()
+
 
 if __name__ == "__main__":
     login = Telalogin()

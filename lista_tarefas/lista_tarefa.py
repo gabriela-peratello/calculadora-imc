@@ -1,5 +1,7 @@
 import ttkbootstrap as tb
 from tkinter import Listbox
+from tkinter import messagebox
+import sqlite3
 
 
 class Telalista:
@@ -24,10 +26,10 @@ class Telalista:
         frame_botao = tb.Frame(self.janela)
         frame_botao.pack(side="bottom")
 
-        botao_excluir = tb.Button(frame_botao, text="Excluir")
+        botao_excluir = tb.Button(frame_botao, text="Excluir", command=self.excluir_itens)
         botao_excluir.pack(side="left")
 
-        feito = tb.Button(frame_botao, text="Concluido")
+        feito = tb.Button(frame_botao, text="Concluido", command=self.concluir)
         feito.pack(side="right", padx=20)
 
     def adicionar_tarefa(self):
@@ -35,6 +37,31 @@ class Telalista:
         tarefa = self.add_tarefa.get()
         #inserindo tarefa na lista
         self.lista.insert(tb.END, tarefa)
+    
+    def excluir_itens (self):
+        selecionando = self.lista.curselection()
+
+        if selecionando:
+            self.lista.delete(selecionando)
+        else:
+            messagebox.showerror(message="Selecione algo para excluir!")
+    
+    def concluir(self):
+        concluido = self.lista.curselection()
+
+
+        if concluido:
+            item = self.lista.get(concluido)
+
+            novo_item = item + " [Feito]"
+
+            self.lista.delete(concluido)
+            self.lista.insert(concluido, novo_item)
+        else:
+             messagebox.showerror(message="Selecione algo para concluir!")
+
+
+
 
 
 

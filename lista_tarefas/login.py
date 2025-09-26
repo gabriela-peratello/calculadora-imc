@@ -59,7 +59,7 @@ class Telalogin:
         senha = (self.janela_senha.get())
 
 
-        if login == "gabriela" and senha == "gabi2008":
+        if login == "g" and senha == "02":
             #messagebox.showinfo("Login aceito!", "Informações corretas inseridas.")
             self.janela.destroy()
             lista = Telalista()

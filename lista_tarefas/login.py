@@ -5,7 +5,7 @@ from lista_tarefa import Telalista
 
 class Telalogin:
     def __init__(self):
-        self.janela = tb.Window (title="Lista de Afazeres", themename="darkly")
+        self.janela = tb.Window (title="Lista de Afazeres", themename="morph")
         #tamanho da janela
         self.janela.geometry("800x600")
         self.janela.resizable(False, False)

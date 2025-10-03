@@ -6,7 +6,7 @@ import sqlite3
 
 class Telalista:
     def __init__(self):
-        self.janela = tb.Window("Afazeres", themename="superhero")
+        self.janela = tb.Window("Afazeres", themename="morph")
         self.janela.geometry("800x600")
         self.janela.resizable(False, False)
 
@@ -32,11 +32,56 @@ class Telalista:
         feito = tb.Button(frame_botao, text="Concluido", command=self.concluir)
         feito.pack(side="right", padx=20)
 
+        #criando e conectando ao banco de dados
+        conexao = sqlite3.connect("lista_tarefas/bddados.sqlite")
+        #criando o cursor que comanda o banco de dados
+        cursor = conexao.cursor()
+        #criando tabela
+        sql_tabela = """
+                        CREATE TABLE IF NOT EXISTS tarefa (
+                        codigo integer primary key autoincrement, 
+                        desc_tarefa varchar(200));
+                    """
+        cursor.execute(sql_tabela)
+        #comitei as alterações
+        conexao.commit()
+        #fechei as conexões
+        cursor.close()
+        conexao.close()
+
+        #atualizar a lista
+        conexao = sqlite3.connect("lista_tarefas/bddados")
+        cursor = conexao.cursor()
+
+        selecionar_tarefas=""" SELECT codigo, desc_tarefa, FROM tarefas
+                            """
+        
+        cursor.execute(selecionar_tarefas)
+
+        terefas_lista = cursor.fetchall()
+
+        cursor.close()
+        conexao.close()
+
     def adicionar_tarefa(self):
         #pegando o texto da caixa de texto
         tarefa = self.add_tarefa.get()
         #inserindo tarefa na lista
         self.lista.insert(tb.END, tarefa)
+
+        conexao = sqlite3.connect("lista_tarefas/bddados.sqlite")
+        cursor = conexao.cursor()
+        #sql do insert
+        sql_insert = """
+                    INSERT INTO tarefa (desc_tarefa)
+                    VALUES (?)
+                        """
+        cursor.execute(sql_insert,[tarefa])
+
+        conexao.commit()
+        cursor.close()
+        conexao.close()
+        
     
     def excluir_itens (self):
         selecionando = self.lista.curselection()
@@ -59,31 +104,7 @@ class Telalista:
             self.lista.insert(concluido, novo_item)
         else:
              messagebox.showerror(message="Selecione algo para concluir!")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    
     def run(self):
         self.janela.mainloop()
 if __name__ == "__main__":

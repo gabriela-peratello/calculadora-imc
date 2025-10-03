@@ -38,7 +38,7 @@ class Telalista:
         cursor = conexao.cursor()
         #criando tabela
         sql_tabela = """
-                        CREATE TABLE IF NOT EXISTS tarefa (
+                        CREATE TABLE IF NOT EXISTS tarefas (
                         codigo integer primary key autoincrement, 
                         desc_tarefa varchar(200));
                     """
@@ -50,18 +50,21 @@ class Telalista:
         conexao.close()
 
         #atualizar a lista
-        conexao = sqlite3.connect("lista_tarefas/bddados")
+        conexao = sqlite3.connect("lista_tarefas/bddados.sqlite")
         cursor = conexao.cursor()
 
-        selecionar_tarefas=""" SELECT codigo, desc_tarefa, FROM tarefas
+        selecionar_tarefas=""" SELECT codigo, desc_tarefa FROM tarefas
                             """
-        
         cursor.execute(selecionar_tarefas)
 
-        terefas_lista = cursor.fetchall()
+        tarefas_lista = cursor.fetchall()
 
         cursor.close()
         conexao.close()
+
+        #inserindo os itens na listbox
+        for linha in tarefas_lista:
+            self.lista.insert("end", linha[1])
 
     def adicionar_tarefa(self):
         #pegando o texto da caixa de texto

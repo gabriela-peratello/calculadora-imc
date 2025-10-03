@@ -49,16 +49,20 @@ class Telalista:
         cursor.close()
         conexao.close()
 
+        self.atualiar_lista()
+
+
+    def atualiar_lista(self):
         #atualizar a lista
         conexao = sqlite3.connect("lista_tarefas/bddados.sqlite")
         cursor = conexao.cursor()
 
-        selecionar_tarefas=""" SELECT codigo, desc_tarefa FROM tarefas
-                            """
+        selecionar_tarefas=""" SELECT codigo, desc_tarefa FROM tarefas"""
         cursor.execute(selecionar_tarefas)
 
         tarefas_lista = cursor.fetchall()
-
+        
+        conexao.commit()
         cursor.close()
         conexao.close()
 
@@ -76,7 +80,7 @@ class Telalista:
         cursor = conexao.cursor()
         #sql do insert
         sql_insert = """
-                    INSERT INTO tarefa (desc_tarefa)
+                    INSERT INTO tarefas (desc_tarefa)
                     VALUES (?)
                         """
         cursor.execute(sql_insert,[tarefa])
@@ -93,6 +97,12 @@ class Telalista:
             self.lista.delete(selecionando)
         else:
             messagebox.showerror(message="Selecione algo para excluir!")
+
+            #deletar algo da tabela
+            conexao =sqlite3.connect("lista_tarefas/bddados.sqlite")
+            cursor =conexao.cursor()
+
+            cursor.execute("DELETE FROM tarefas WHERE ")
     
     def concluir(self):
         concluido = self.lista.curselection()

@@ -1,6 +1,7 @@
 import ttkbootstrap as tb
 from tkinter import Listbox
 from tkinter import messagebox
+from login import Telalogin
 import sqlite3
 
 
@@ -33,7 +34,7 @@ class Telalista:
         feito.pack(side="right", padx=20)
 
         #criando e conectando ao banco de dados
-        conexao = sqlite3.connect("lista_tarefas/bddados.sqlite")
+        conexao = sqlite3.connect("./bddados.sqlite")
         #criando o cursor que comanda o banco de dados
         cursor = conexao.cursor()
         #criando tabela
@@ -49,12 +50,17 @@ class Telalista:
         cursor.close()
         conexao.close()
 
+        Telalogin(self.janela)
+
+        #escondendo a janela
+        self.atualiar_lista()
+
         self.atualiar_lista()
 
 
     def atualiar_lista(self):
         #atualizar a lista
-        conexao = sqlite3.connect("lista_tarefas/bddados.sqlite")
+        conexao = sqlite3.connect("./bddados.sqlite")
         cursor = conexao.cursor()
 
         selecionar_tarefas=""" SELECT codigo, desc_tarefa FROM tarefas"""
@@ -76,7 +82,7 @@ class Telalista:
         #inserindo tarefa na lista
         self.lista.insert(tb.END, tarefa)
 
-        conexao = sqlite3.connect("lista_tarefas/bddados.sqlite")
+        conexao = sqlite3.connect("./bddados.sqlite")
         cursor = conexao.cursor()
         #sql do insert
         sql_insert = """
@@ -99,7 +105,7 @@ class Telalista:
             messagebox.showerror(message="Selecione algo para excluir!")
 
             #deletar algo da tabela
-            conexao =sqlite3.connect("lista_tarefas/bddados.sqlite")
+            conexao =sqlite3.connect("./bddados.sqlite")
             cursor =conexao.cursor()
 
             cursor.execute("DELETE FROM tarefas WHERE ")

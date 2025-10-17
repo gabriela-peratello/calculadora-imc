@@ -1,14 +1,16 @@
 import ttkbootstrap as tb
 from tkinter import messagebox
-from lista_tarefa import Telalista
 
 
 class Telalogin:
-    def __init__(self):
-        self.janela = tb.Window (title="Lista de Afazeres", themename="morph")
+    def __init__(self, janela_pai):
+        self.janela = tb.Toplevel(janela_pai)
         #tamanho da janela
         self.janela.geometry("800x600")
         self.janela.resizable(False, False)
+
+        #fechando
+        self.janela.protocol("WM_DELETE_WINDOW", self.sair)
 
         #introdução
         self.janela_nome = tb.Label(self.janela, text= "Seja bem vindo a sua lista de afazeres. Que tal começar fazendo o login?")
@@ -62,11 +64,8 @@ class Telalogin:
         if login == "g" and senha == "02":
             #messagebox.showinfo("Login aceito!", "Informações corretas inseridas.")
             self.janela.destroy()
-            lista = Telalista()
-            lista.run()
-            
-
-
+            # lista = Telalista()
+            # lista.run()
         else:
             messagebox.showerror("Login recusado.", "Tente novamente na próxima!") 
 

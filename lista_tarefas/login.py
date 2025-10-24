@@ -35,17 +35,17 @@ class Telalogin:
         
         #botão para enviar
         self.janela_botao = tb.Button(self.janela, text="Confimar", command=self.conferir_login)
-        self.janela_botao.pack( padx=20, pady=20)
+        self.janela_botao.pack(pady=10)
 
         #botao para cancelar
         self.janela_botao_cancelar = tb.Button(self.janela, text="SAIR", command=self.sair)
-        self.janela_botao_cancelar.pack( padx=20, pady=40)
+        self.janela_botao_cancelar.pack(pady=50)
 
         #mostrar aceitação
         self.aceito_label = tb.Label(self.janela, text="") 
         self.aceito_label.pack(pady=20)
 
-        tb.Button(self.janela, text="Cadastrar", command=self.abrir_cadastro).pack()
+        tb.Button(self.janela, text="Cadastrar", command=self.abrir_cadastro).pack(pady=40 )
 
 
     def run(self):
@@ -72,12 +72,16 @@ class Telalogin:
 
         cursor.execute("""
                     SELECT usuario, nome FROM usuario WHERE 
-                    usuario="?" and senha ="?;""",
+                    usuario=? and senha =?;
+                       """,
                     [login, senha]
                        )
-
-        if login == "g" and senha == "02":
-            #messagebox.showinfo("Login aceito!", "Informações corretas inseridas.")
+        #retorna uma linha da lista
+        resultado = cursor.fetchone()
+        conexao.close()
+        #diferente de vazio
+        if resultado != None:
+            messagebox.showinfo("Login aceito.", message=f"Bem vindo {resultado[0]}!")
             self.janela.destroy()
             # lista = Telalista()
             # lista.run()

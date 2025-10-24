@@ -1,6 +1,7 @@
 import ttkbootstrap as tb
 from tkinter import messagebox
-
+from cadastro import Telacadastro
+import sqlite3
 
 class Telalogin:
     def __init__(self, janela_pai):
@@ -41,12 +42,18 @@ class Telalogin:
         self.janela_botao_cancelar.pack( padx=20, pady=40)
 
         #mostrar aceitação
-        self.aceito_label = tb.Label(self.janela, text="")
+        self.aceito_label = tb.Label(self.janela, text="") 
         self.aceito_label.pack(pady=20)
+
+        tb.Button(self.janela, text="Cadastrar", command=self.abrir_cadastro).pack()
 
 
     def run(self):
         self.janela.mainloop()
+
+    #abrir tela cadastro
+    def abrir_cadastro(self):
+        Telacadastro(self.janela_botao)
 
     #confirmação pra sair
     def sair (self):
@@ -60,6 +67,14 @@ class Telalogin:
         login = (self.janela_login.get())
         senha = (self.janela_senha.get())
 
+        conexao = sqlite3.connect("./bddados.sqlite")
+        cursor = conexao.cursor()
+
+        cursor.execute("""
+                    SELECT usuario, nome FROM usuario WHERE 
+                    usuario="?" and senha ="?;""",
+                    [login, senha]
+                       )
 
         if login == "g" and senha == "02":
             #messagebox.showinfo("Login aceito!", "Informações corretas inseridas.")
@@ -86,5 +101,5 @@ class Telalogin:
 
 
 if __name__ == "__main__":
-    login = Telalogin()
+    login = Telalogin("casasasasasas")
     login.janela.mainloop()

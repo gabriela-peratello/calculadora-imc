@@ -4,8 +4,8 @@ from tkinter import messagebox
 import sqlite3
 
 class Telacadastro:
-    def __init__(self):
-        self.janela = tb.Window("Cadastro", themename="morph")
+    def __init__(self, janela_pai):
+        self.janela = tb.Toplevel(janela_pai)
         self.janela.geometry("800x600")
         self.janela.resizable(False, False)
 
@@ -59,32 +59,42 @@ class Telacadastro:
         conexao.close()
 
     def inserir_usuario(self):
-        #criar conexao
-        conexao = sqlite3.connect("./bddados.sqlite")
-        #criar cursor
-        cursor = conexao.cursor()
 
-        nome = self.janela_digitar_nome.get()
-        usuario = self.janela_crieusuario.get()
-        senha = self.janela_digite_senha.get()
+        try:
+       
+            #criar conexao
+            conexao = sqlite3.connect("./bddados.sqlite")
+            #criar cursor
+            cursor = conexao.cursor()
+
+            nome = self.janela_digitar_nome.get()
+            usuario = self.janela_usuario.get()
+            senha = self.janela_senha.get()
 
 
 
-        #criar cursor
-        cursor.execute("""INSERT INTO usuario
-                        (nome,
-                        usuario,
-                        senha)
-                    VALUES
-                        (?,
-                        ?,
-                        ?);
-                        """,
-                        (nome, usuario, senha)
-                        )
-        #comitar
-        conexao.commit()
-        conexao.close()
+            #criar cursor
+            cursor.execute("""INSERT INTO usuario
+                            (nome,
+                            usuario,
+                            senha)
+                        VALUES
+                            (?,
+                            ?,
+                            ?);
+                            """,
+                            (nome, usuario, senha)
+                            )
+            #comitar
+            conexao.commit()
+            conexao.close()
+
+            messagebox.showinfo("Cadastro realizado", "Cadastro feito com sucesso!")
+        except:
+            messagebox.showerror("Erro", "Erro ao cadastrar")
+        finally:
+            conexao.close()
+
 
         
     

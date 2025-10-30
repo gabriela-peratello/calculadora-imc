@@ -4,8 +4,13 @@ from cadastro import Telacadastro
 import sqlite3
 
 class Telalogin:
-    def __init__(self, janela_pai):
-        self.janela = tb.Toplevel(janela_pai)
+    def __init__(self, classe_pai):
+        
+        self.janela_pai = classe_pai.janela
+        self.classe_pai = classe_pai
+
+        self.janela = tb.Toplevel(self.janela_pai)
+
         #tamanho da janela
         self.janela.geometry("800x600")
         self.janela.resizable(False, False)
@@ -85,6 +90,9 @@ class Telalogin:
             self.janela.destroy()
             # lista = Telalista()
             # lista.run()
+            self.janela_pai.deiconify()
+            self.classe_pai_pai.usuario_logado = login
+            self.classe_pai.atualizar_lista()
         else:
             messagebox.showerror("Login recusado.", "Tente novamente na próxima!") 
 

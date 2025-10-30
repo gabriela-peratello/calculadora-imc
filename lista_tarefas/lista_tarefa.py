@@ -7,6 +7,9 @@ import sqlite3
 
 class Telalista:
     def __init__(self):
+
+        self.usuario_logado = None
+
         self.janela = tb.Window("Afazeres", themename="morph")
         self.janela.geometry("800x600")
         self.janela.resizable(False, False)
@@ -41,7 +44,9 @@ class Telalista:
         sql_tabela = """
                         CREATE TABLE IF NOT EXISTS tarefas (
                         codigo integer primary key autoincrement, 
-                        desc_tarefa varchar(200));
+                        desc_tarefa varchar(200),
+                        senha VARCHAR(20)
+                        );
                     """
         cursor.execute(sql_tabela)
         #comitei as alterações
@@ -50,10 +55,10 @@ class Telalista:
         cursor.close()
         conexao.close()
 
-        Telalogin(self.janela)
+        Telalogin(self)
 
-        #escondendo a janela
-        self.atualiar_lista()
+        #escondendo a janela da lista tarefa
+        self.janela.withdraw()
 
         self.atualiar_lista()
 
@@ -63,8 +68,8 @@ class Telalista:
         conexao = sqlite3.connect("./bddados.sqlite")
         cursor = conexao.cursor()
 
-        selecionar_tarefas=""" SELECT codigo, desc_tarefa FROM tarefas"""
-        cursor.execute(selecionar_tarefas)
+        selecionar_tarefas=""" SELECT codigo, desc_tarefa FROM tarefas WHERE usuario = ?"""
+        cursor.execute(selecionar_tarefas, [self.usuario_logado])
 
         tarefas_lista = cursor.fetchall()
         
@@ -86,10 +91,10 @@ class Telalista:
         cursor = conexao.cursor()
         #sql do insert
         sql_insert = """
-                    INSERT INTO tarefas (desc_tarefa)
-                    VALUES (?)
+                    INSERT INTO tarefas (desc_tarefa, usuario)
+                    VALUES (?, ?)
                         """
-        cursor.execute(sql_insert,[tarefa])
+        cursor.execute(sql_insert,[tarefa, self.usuario_logado])
 
         conexao.commit()
         cursor.close()
